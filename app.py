@@ -1,8 +1,8 @@
-import sys
+import sys, os
+current_dir = os.getcwd()
+sys.path.append(current_dir)
 
 from views import student
-sys.path.append(r'C:\Users\Uzer\Desktop\python\logBook')
-import os
 
 from flask import Flask
 

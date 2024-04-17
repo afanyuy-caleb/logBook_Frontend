@@ -222,7 +222,7 @@ def studentHome():
         x = 0.02
         for key in row:
           if key == 'img' and row[key] != "":
-            img_path = dir_path + "/224841.536453.jpg"
+            img_path = dir_path + f"/{row[key]}"
 
             try:
               image_tk = ImageTk.PhotoImage(file=img_path)

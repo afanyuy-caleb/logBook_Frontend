@@ -3,9 +3,9 @@ import sys
 current_dir = os.getcwd()
 sys.path.append(current_dir)
 
-from models.Class import classTab
+from models.Class import Class
 
-obj = classTab()
+obj = Class()
 
 def load(cond = None):
   if cond is None:

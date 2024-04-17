@@ -29,7 +29,7 @@ class Class:
         cur = conn.cursor()
 
         for row in list:
-            query = f"INSERT INTO {classTab.table} VALUES(?, ?)"
+            query = f"INSERT INTO {self.table} VALUES(?, ?)"
             cur.execute(query, row)
             conn.commit()
 
@@ -44,7 +44,7 @@ class Class:
       with sq.connect(PATH_TO_DB) as conn:
         cur = conn.cursor()
 
-        update_query = f"UPDATE {classTab.table} set {updateData} WHERE {condition}"
+        update_query = f"UPDATE {self.table} set {updateData} WHERE {condition}"
 
         cur.execute(update_query)
         conn.commit()
@@ -62,9 +62,9 @@ class Class:
         cur = conn.cursor()
 
         if condition is None:
-          query = f"SELECT * FROM {classTab.table}"
+          query = f"SELECT * FROM {self.table}"
         else:
-          query = f"SELECT * FROM {classTab.table} WHERE {condition}"
+          query = f"SELECT * FROM {self.table} WHERE {condition}"
 
         cur.execute(query)
         result =  cur.fetchall()
@@ -83,7 +83,7 @@ class Class:
        with sq.connect(PATH_TO_DB) as conn:
         cur = conn.cursor()
      
-        query = f"DELETE FROM {classTab.table} WHERE {condition}"
+        query = f"DELETE FROM {self.table} WHERE {condition}"
         cur.execute(query)
         conn.commit()
 

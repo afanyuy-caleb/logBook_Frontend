@@ -36,7 +36,7 @@ class classCourse:
       with sq.connect(PATH_TO_DB) as conn:
         cur = conn.cursor()
 
-        insert = f"INSERT INTO {classCourse.table} (class_id, course_id, course_info) VALUES (?, ?, ?)"
+        insert = f"INSERT INTO {self.table} (class_id, course_id, course_info) VALUES (?, ?, ?)"
         cur.execute(insert, list)
         conn.commit()
 
@@ -52,7 +52,7 @@ class classCourse:
       with sq.connect(PATH_TO_DB) as conn:
         cur = conn.cursor()
 
-        update_query = f"UPDATE {classCourse.table} set {updateData} WHERE {condition}"
+        update_query = f"UPDATE {self.table} set {updateData} WHERE {condition}"
         
         cur.execute(update_query)
         conn.commit()
@@ -72,9 +72,9 @@ class classCourse:
         cur = conn.cursor()
 
         if condition is None:
-          sel = f"SELECT * FROM {classCourse.table}"
+          sel = f"SELECT * FROM {self.table}"
         else:
-          sel = f"SELECT * FROM {classCourse.table} WHERE {condition}"
+          sel = f"SELECT * FROM {self.table} WHERE {condition}"
 
         cur.execute(sel)
         result =  cur.fetchone()
@@ -89,7 +89,7 @@ class classCourse:
        with sq.connect(PATH_TO_DB) as conn:
         cur = conn.cursor()
      
-        query = f"DELETE FROM {classCourse.table} WHERE {condition}"
+        query = f"DELETE FROM {self.table} WHERE {condition}"
         cur.execute(query)
         conn.commit()
 

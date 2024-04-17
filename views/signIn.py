@@ -110,7 +110,7 @@ def SignIn():
   if(status):
     options = [row[1] for row in allOptions]
   else:
-    messageBox.showerror("Error", "Erro loading options")
+    messageBox.showerror("Error", allOptions)
 
   sel_opt = StringVar()
   sel_opt.set('None')

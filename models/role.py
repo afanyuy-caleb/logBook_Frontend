@@ -12,7 +12,7 @@ class Role:
         cur = conn.cursor()
       
         # Create role table
-        query = f"CREATE TABLE IF NOT EXISTS {Role.table} (role_id INTEGER PRIMARY KEY, role_name varchar(15) UNIQUE)"
+        query = f"CREATE TABLE IF NOT EXISTS {self.table} (role_id INTEGER PRIMARY KEY, role_name varchar(15) UNIQUE)"
 
         cur.execute(query)
         conn.commit()
@@ -30,7 +30,7 @@ class Role:
         cur = conn.cursor()
 
         for row in list:
-          query = f"INSERT INTO {Role.table} (role_id, role_name) VALUES (?, ?)"
+          query = f"INSERT INTO {self.table} (role_id, role_name) VALUES (?, ?)"
           cur.execute(query, row)
           conn.commit()
 
@@ -45,7 +45,7 @@ class Role:
       with sq.connect(PATH_TO_DB) as conn:
         cur = conn.cursor()
 
-        query = f"UPDATE {Role.table} set {updateData} WHERE {condition}"
+        query = f"UPDATE {self.table} set {updateData} WHERE {condition}"
 
         cur.execute(query)
         conn.commit()
@@ -63,9 +63,9 @@ class Role:
         cur = conn.cursor()
 
         if condition is None:
-          query = f"SELECT * FROM {Role.table}"
+          query = f"SELECT * FROM {self.table}"
         else:
-          query = f"SELECT * FROM {Role.table} WHERE {condition}"
+          query = f"SELECT * FROM {self.table} WHERE {condition}"
 
         cur.execute(query)
         result =  cur.fetchall()
@@ -80,7 +80,7 @@ class Role:
        with sq.connect(PATH_TO_DB) as conn:
         cur = conn.cursor()
      
-        query = f"DELETE FROM {Role.table} WHERE {condition}"
+        query = f"DELETE FROM {self.table} WHERE {condition}"
         cur.execute(query)
         conn.commit()
 
