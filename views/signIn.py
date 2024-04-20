@@ -4,13 +4,12 @@ current_dir = os.getcwd()
 sys.path.append(current_dir)
 from tkinter import *
 import tkinter.messagebox as messageBox
-import controllers.coursectrl as courCT
-import controllers.classCT as clsCT
-import controllers.stud_ctrl as studCT
+import viewmodels.courses as courCT
+import viewmodels.classes as clsCT
+import viewmodels.students as studCT
 from . import shared_data
 from PIL import Image, ImageTk
 from tkinter import filedialog, font
-
 
 # Functions
 

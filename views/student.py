@@ -4,15 +4,14 @@ import sys
 current_dir = os.getcwd()
 sys.path.append(current_dir)
 import tkinter.messagebox as messageBox
-from tkinter import font, filedialog
+from tkinter import font, filedialog, ttk
 from . import shared_data
-import controllers.coursectrl as courCT
-import controllers.classCT as clsCT
-import controllers.addInfo_ctrl as addCT
+import viewmodels.courses as courCT
+import viewmodels.classes as clsCT
+import viewmodels.addInfo_ctrl as addCT
 import ttkbootstrap as tb
 from PIL import Image, ImageTk
 import datetime, json
-
 
 
 def studentHome():
@@ -94,7 +93,7 @@ def studentHome():
 
         # Update the image label with the new image
         image_label.config(image=photo)
-        image_label.image = photo
+        image_label.photo = photo
 
     
     def saveData():
@@ -159,7 +158,7 @@ def studentHome():
 
     global myFrame, btn, cour_id
 
-    myFrame = Frame(root, bg="white", width="700", height="600")
+    myFrame = Frame(root, bg="white", width="700", height="600", bd=0)
     myFrame.place(relx=0.32, rely=0.12)
 
     title = Label(myFrame, text = sub, font=('Comic Sans MS', 12), bg="white")
@@ -173,9 +172,20 @@ def studentHome():
 
     title.place(x=wid, rely=0.03)
 
-    infoFrame = Frame(myFrame, bd=0)
-    infoFrame.place(relx=0, rely=0.1, relwidth=1.0, relheight=1.0)
+    myCanvas = Canvas(myFrame, scrollregion=(0,0, 1400, 1000))
+    myCanvas.place(relx=0, rely=0.1, relwidth=1.0, relheight=1.0)
+
+    infoFrame = Frame(myCanvas, bd=1)
+    infoFrame.place(relx=0, rely=0, relwidth=1.0, relheight=1.0)
     infoFrame.configure(background="white smoke")
+
+    # Configure the scrollbar
+
+    scroll_y = Scrollbar(myFrame, orient=VERTICAL, command=myCanvas.yview)
+    scroll_y.place(relx=1, rely=0, relheight=1, anchor="ne")
+
+    # myCanvas.create_window((0,0), window=infoFrame)
+    myCanvas.configure(yscrollcommand=scroll_y.set)
 
     # Title header
     date_label = Label(infoFrame, text="Date", font=('Comic Sans MS', 12, 'bold'))
@@ -188,7 +198,8 @@ def studentHome():
     img_label.place(relx=0.75, rely=0.01)
 
     # Grey line to separate the header
-    sep_line = Frame(infoFrame, height=2, bg="gray63")
+    sep_line = Frame(infoFrame, height=2)
+    sep_line.configure(bg="gray63")
     sep_line.place(relx=0, rely=0.07, relwidth=1.0)
 
     # We display the information based on the class that has been selected
@@ -215,19 +226,27 @@ def studentHome():
       return  
     
     try:
+
       data = json.loads(data[2])
       y = 0.1
 
       for row in data:
-        x = 0.02
+        x = 0.07
         for key in row:
           if key == 'img' and row[key] != "":
+            x += 0.05
             img_path = dir_path + f"/{row[key]}"
 
             try:
-              image_tk = ImageTk.PhotoImage(file=img_path)
+              image_tk = Image.open(img_path)
+              image_tk.thumbnail((150, 100))
 
-              item = Label(infoFrame, image=image_tk)
+              image_tk = ImageTk.PhotoImage(image_tk)
+
+              item = Label(infoFrame)
+              item.config(image=image_tk)
+              item.photo = image_tk
+              
               item.place(relx=x, rely=y)
 
             except Exception as e:
@@ -239,7 +258,7 @@ def studentHome():
 
           x += 0.3
         
-        y += y
+        y += 0.3
 
     except TypeError:
       pass
@@ -278,7 +297,6 @@ def studentHome():
   root.title("IAI logBook")
   root.resizable(False, False)
   root.configure(bg="white")
-
 
   
   # icon
