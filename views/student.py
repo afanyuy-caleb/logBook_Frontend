@@ -102,7 +102,7 @@ def studentHome():
       if not stat:
        file_name = ""
       
-      stats, msg = addCT.add_course_Info(cur_date.entry.get(), desc_text.get("1.0", END).strip(), file_name, cour_id)
+      stats, msg = addCT.add_course_details(cur_date.entry.get(), desc_text.get("1.0", END).strip(), file_name, cour_id)
 
       if(stats):
         messageBox.showinfo("Success", msg)
@@ -190,7 +190,7 @@ def studentHome():
     # Title header
     date_label = Label(infoFrame, text="Date", font=('Comic Sans MS', 12, 'bold'))
     date_label.place(relx=0.1, rely=0.01)
-
+  
     desc_label = Label(infoFrame, text="Description", font=('Comic Sans MS', 12, 'bold'))
     desc_label.place(relx=0.38, rely=0.01)
 
@@ -214,11 +214,11 @@ def studentHome():
     try:
       if cls_id:
         cond = f"course_id = {cour_id} AND class_id = {cls_id}"
-        stat, data = addCT.obj.read(cond)
+        stat, data = addCT.get_course_details(cond)
         
     except NameError:
       cond = f"course_id = {cour_id} AND class_id = {studData['class_id']}"
-      stat, data = addCT.obj.read(cond)
+      stat, data = addCT.get_course_details(cond)
 
     if not stat:
       messageBox.showerror("Error", 'Error occured when loading data')
@@ -227,38 +227,39 @@ def studentHome():
     
     try:
 
-      data = json.loads(data[2])
-      y = 0.1
+      data = json.loads(data[0][1])
 
-      for row in data:
-        x = 0.07
-        for key in row:
-          if key == 'img' and row[key] != "":
-            x += 0.05
-            img_path = dir_path + f"/{row[key]}"
+      if data:
+        y = 0.1
+        for row in data:
+          x = 0.07
+          for key in row:
+            if key == 'img' and row[key] != "":
+              x += 0.05
+              img_path = dir_path + f"/{row[key]}"
 
-            try:
-              image_tk = Image.open(img_path)
-              image_tk.thumbnail((150, 100))
+              try:
+                image_tk = Image.open(img_path)
+                image_tk.thumbnail((150, 100))
 
-              image_tk = ImageTk.PhotoImage(image_tk)
+                image_tk = ImageTk.PhotoImage(image_tk)
 
-              item = Label(infoFrame)
-              item.config(image=image_tk)
-              item.photo = image_tk
-              
+                item = Label(infoFrame)
+                item.config(image=image_tk)
+                item.photo = image_tk
+                
+                item.place(relx=x, rely=y)
+
+              except Exception as e:
+                print("Error printing image", e)
+
+            else:
+              item = Label(infoFrame, text = row[key], bg="white smoke")
               item.place(relx=x, rely=y)
 
-            except Exception as e:
-              print("Error printing image", e)
-
-          else:
-            item = Label(infoFrame, text = row[key], bg="white smoke")
-            item.place(relx=x, rely=y)
-
-          x += 0.3
-        
-        y += 0.3
+            x += 0.3
+          
+          y += 0.3
 
     except TypeError:
       pass

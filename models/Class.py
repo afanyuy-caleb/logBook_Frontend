@@ -1,96 +1,26 @@
-import sqlite3 as sq
-from .constants import PATH_TO_DB
+import requests
+from requests.exceptions import HTTPError
 
-class Class:
-  
-  table = 'class'
+def get_classes(condition = None):
+    url = "http://127.0.0.1:5000/classes"
 
-  def table_create(self):
     try:
-
-      with sq.connect(PATH_TO_DB) as conn:
-        cur = conn.cursor()
+      if condition:
+        response = requests.get(
+          url,
+          params={'condition': condition}
+        )
       
-        # Create the class table
-        query = "CREATE TABLE IF NOT EXISTS class (class_id INTEGER PRIMARY KEY, class_name varchar(15) UNIQUE)"
-        cur.execute(query)
-        conn.commit()
+      else:
+        response = requests.get(url)
+          
+      response.raise_for_status()
 
-        conn.close()
-        return True, ''
-      
-    except sq.Error as err:
-      return False, err
+    except HTTPError as http_err:
+      return False, f"HTTP error occurred: {http_err}"
 
+    except Exception as err:
+      return False, f"Other error occurred: {err}"
 
-  def write(self, list):
-    try:
-      with sq.connect(PATH_TO_DB) as conn:
-        cur = conn.cursor()
-
-        for row in list:
-            query = f"INSERT INTO {self.table} VALUES(?, ?)"
-            cur.execute(query, row)
-            conn.commit()
-
-        conn.close()
-      return True, ''
-
-    except sq.Error as err:
-      return False, err
-  
-  def update(self, updateData, condition):
-    try:
-      with sq.connect(PATH_TO_DB) as conn:
-        cur = conn.cursor()
-
-        update_query = f"UPDATE {self.table} set {updateData} WHERE {condition}"
-
-        cur.execute(update_query)
-        conn.commit()
-
-        conn.close()
-
-        return True, ''
-    
-    except sq.Error as err:
-      return False, err
-  
-  def read(self, condition=None):
-    try:
-      with sq.connect(PATH_TO_DB) as conn:
-        cur = conn.cursor()
-
-        if condition is None:
-          query = f"SELECT * FROM {self.table}"
-        else:
-          query = f"SELECT * FROM {self.table} WHERE {condition}"
-
-        cur.execute(query)
-        result =  cur.fetchall()
-        
-        
-        return True, result
-    
-    except sq.Error as e:
-      return False, e
-    
-    finally:
-      conn.close()
-  
-  def delete(self, condition):
-    try:
-       with sq.connect(PATH_TO_DB) as conn:
-        cur = conn.cursor()
-     
-        query = f"DELETE FROM {self.table} WHERE {condition}"
-        cur.execute(query)
-        conn.commit()
-
-        return True, ''
-
-    except sq.Error as e:
-      return False, e
-    
-    finally:
-      conn.close()
+    else:
+      return True, response.json()

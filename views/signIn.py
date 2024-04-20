@@ -40,13 +40,14 @@ def SignIn():
       if(status):
         if(names):
           row = names[0]
+
           keys = ['id', 'name', 'dob', 'gender', 'Tel', 'role_id', 'class_id']
 
           shared_data.studInfo = {key: value for key, value in zip(keys, row)}
       
           window.destroy()
         else:
-          messageBox.showinfo('Error', f"student {name} doesn't exist in {opt}")
+          messageBox.showerror('Error', f"student {name} doesn't exist in {opt}")
       else:
         messageBox.showinfo('Data', names)
 
