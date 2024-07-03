@@ -228,19 +228,21 @@ def studentHome():
     try:
 
       data = json.loads(data[0][1])
+      
 
       if data:
-        y = 0.1
+
+        y = 0.08
         for row in data:
-          x = 0.07
+          x = 0.05
           for key in row:
             if key == 'img' and row[key] != "":
-              x += 0.05
+              x += 0.2
               img_path = dir_path + f"/{row[key]}"
 
               try:
                 image_tk = Image.open(img_path)
-                image_tk.thumbnail((150, 100))
+                image_tk.thumbnail((200, 100))
 
                 image_tk = ImageTk.PhotoImage(image_tk)
 
@@ -253,13 +255,20 @@ def studentHome():
               except Exception as e:
                 print("Error printing image", e)
 
+            elif key == 'desc':
+              x -=0.12
+              item = Label(infoFrame, text = row[key], width=35, height=5, bd=1, anchor="center", wraplength=230)
+              item.config(bg="white smoke")
+              item.place(relx=x, rely=y)
+
             else:
-              item = Label(infoFrame, text = row[key], bg="white smoke")
+              item = Label(infoFrame, text = row[key], height=5, width=15)
+              item.config(bg="white smoke")
               item.place(relx=x, rely=y)
 
             x += 0.3
           
-          y += 0.3
+          y += 0.2
 
     except TypeError:
       pass

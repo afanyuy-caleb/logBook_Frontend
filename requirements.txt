@@ -1,0 +1,6 @@
+Some python packages to install
+- PILLOW
+- ttkbootstrap
+- tkcalendar
+- Flask
+- requests
